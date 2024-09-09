@@ -28,7 +28,7 @@ export default function Itinerary() {
             <Text>{`${plan.city}, ${plan.state}, ${plan.country}`}</Text>
             <Button
               title="Explore"
-              onPress={() => navigation.navigate('Explore', { city: plan.city, state: plan.state, country: plan.country })}
+              onPress={() => navigation.navigate('explore', { city: plan.city, state: plan.state, country: plan.country })} // Corrected to 'explore'
             />
           </View>
         ))
