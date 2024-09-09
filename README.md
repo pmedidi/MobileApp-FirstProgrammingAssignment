@@ -1,50 +1,55 @@
-# Welcome to your Expo app 👋
+# Welcome to the Travel Companion Expo App! 🌍✈️
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Get started
+## About the App
 
-1. Install dependencies
+Travel Companion is an application that allows users to plan trips and explore attractions in the destination city. Follow these steps to make the most out of this app:
+
+1. **Add a Travel Plan**:  
+   - Navigate to the **Add Plan** page.
+   - Enter the **city**, **state**, and **country** you plan to visit.
+   - Make sure not to misspell the city, state, or country, as it will affect the search functionality later.
+
+2. **View Your Itinerary**:  
+   - After adding your travel plan, go to the **Itinerary** page.
+   - You’ll see the destinations you’ve entered.
+   - Select a city from your itinerary and **click "Explore"** to view attractions in that area.
+
+3. **Explore Attractions**:  
+   - Once you’ve selected a destination from the **Itinerary** page, go to the **Explore** page.
+   - This will show you nearby attractions based on the destination you selected.
+
+⚠️ **Important Note**:  
+You must first visit the **Itinerary** page and select a destination before going to the **Explore** page.  
+**If you go to the Explore page without selecting a destination, the app will crash because there will be no location data to search for attractions.**
+
+## Get Started
+
+1. **Install dependencies**:
 
    ```bash
    npm install
-   ```
+2. **Start The App**:
+   npx expo start
 
-2. Start the app
 
-   ```bash
-    npx expo start
-   ```
+In the output, you'll find options to open the app in a:
 
-In the output, you'll find options to open the app in a
+development build
+Android emulator
+iOS simulator
+Expo Go, a limited sandbox for trying out app development with Expo
+You can start developing by editing the files inside the app directory. This project uses file-based routing.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**App Navigation**
+Home Page: Displays a welcome message and a brief description of the app’s functionality.
+Add Plan: Navigate to this page to add your travel destination.
+Itinerary: View the cities you’ve added and choose one to explore.
+Explore: After selecting a city, you can navigate to this page to see the attractions in the area.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
 
 When you're ready, run:
 
-```bash
 npm run reset-project
-```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
