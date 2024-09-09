@@ -1,31 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { db, collection, getDocs } from '../../firebase';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
+import { db, collection, getDocs } from '../../firebase'; // Firebase methods
+import { useNavigation } from '@react-navigation/native';
 
 export default function Itinerary() {
-  const [travelPlans, setTravelPlans] = useState([]);
+  const [plans, setPlans] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPlans = async () => {
       const querySnapshot = await getDocs(collection(db, 'travelPlans'));
-      const plans = querySnapshot.docs.map(doc => doc.data());
-      setTravelPlans(plans);
+      const plansArray = [];
+      querySnapshot.forEach((doc) => {
+        plansArray.push({ ...doc.data(), id: doc.id });
+      });
+      setPlans(plansArray);
     };
     fetchPlans();
   }, []);
 
   return (
     <ScrollView style={styles.container}>
-      {travelPlans.length > 0 ? (
-        travelPlans.map((plan, index) => (
-          <View key={index} style={styles.planItem}>
-            <Text style={styles.planText}>Destination: {plan.destination}</Text>
-            <Text>Date: {plan.date}</Text>
-            <Text>Notes: {plan.notes}</Text>
+      <Text style={styles.title}>Your Itinerary</Text>
+      {plans.length > 0 ? (
+        plans.map((plan) => (
+          <View key={plan.id} style={styles.planContainer}>
+            <Text>{`${plan.city}, ${plan.state}, ${plan.country}`}</Text>
+            <Button
+              title="Explore"
+              onPress={() => navigation.navigate('Explore', { city: plan.city, state: plan.state, country: plan.country })}
+            />
           </View>
         ))
       ) : (
-        <Text style={styles.noPlansText}>No travel plans saved.</Text>
+        <Text>No plans added yet.</Text>
       )}
     </ScrollView>
   );
@@ -37,22 +45,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f0f0f0',
   },
-  planItem: {
-    marginVertical: 10,
-    padding: 15,
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  planContainer: {
+    padding: 10,
     backgroundColor: '#fff',
+    marginBottom: 10,
     borderRadius: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-  },
-  planText: {
-    fontSize: 16,
-  },
-  noPlansText: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 50,
-    color: '#888',
   },
 });

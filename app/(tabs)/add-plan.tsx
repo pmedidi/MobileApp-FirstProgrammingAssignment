@@ -1,53 +1,64 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { db, collection, addDoc } from '../../firebase';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { db, collection, addDoc } from '../../firebase'; // Import Firebase methods
 
 export default function AddPlan({ navigation }) {
-  const [destination, setDestination] = useState('');
-  const [date, setDate] = useState('');
-  const [notes, setNotes] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
+  const [message, setMessage] = useState('');
 
-  const saveTravelPlan = async () => {
+  const addTravelPlan = async () => {
+    if (!city || !state || !country) {
+      setMessage('Please fill out all fields.');
+      return;
+    }
     try {
-      await addDoc(collection(db, 'travelPlans'), {
-        destination,
-        date,
-        notes
+      const docRef = await addDoc(collection(db, 'travelPlans'), {
+        city,
+        state,
+        country,
       });
-      Alert.alert("Success", "Travel plan saved!");
-      navigation.navigate('Itinerary');  // Navigate to itinerary after saving
+      setMessage('Travel Plan added successfully!');
+      setCity('');
+      setState('');
+      setCountry('');
     } catch (e) {
-      console.error("Error adding document: ", e);
+      setMessage('Error adding Travel Plan');
+      console.error('Error adding document: ', e);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Destination:</Text>
+      <Text style={styles.title}>Add a Travel Plan</Text>
+
+      <Text style={styles.label}>City</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter destination"
-        placeholderTextColor="#ccc"  // Placeholder color for visibility
-        onChangeText={setDestination}
-        value={destination}
+        placeholder="Enter city"
+        value={city}
+        onChangeText={setCity}
       />
-      <Text style={styles.label}>Date:</Text>
+
+      <Text style={styles.label}>State</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter date"
-        placeholderTextColor="#ccc"  // Placeholder color for visibility
-        onChangeText={setDate}
-        value={date}
+        placeholder="Enter state"
+        value={state}
+        onChangeText={setState}
       />
-      <Text style={styles.label}>Notes:</Text>
+
+      <Text style={styles.label}>Country</Text>
       <TextInput
         style={styles.input}
-        placeholder="Enter notes"
-        placeholderTextColor="#ccc"  // Placeholder color for visibility
-        onChangeText={setNotes}
-        value={notes}
+        placeholder="Enter country"
+        value={country}
+        onChangeText={setCountry}
       />
-      <Button title="Save Plan" onPress={saveTravelPlan} />
+
+      <Button title="Add Travel Plan" onPress={addTravelPlan} />
+      {message ? <Text style={styles.message}>{message}</Text> : null}
     </View>
   );
 }
@@ -56,19 +67,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#121212', // Dark background for the container
+    justifyContent: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   label: {
-    marginVertical: 5,
     fontSize: 16,
-    color: '#fff', // White text color for labels
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   input: {
+    height: 40,
+    borderColor: '#ccc',
     borderWidth: 1,
+    marginBottom: 20,
     padding: 10,
-    marginVertical: 5,
-    borderRadius: 5,
-    backgroundColor: '#333', // Darker background for inputs
-    color: '#fff', // White text for the inputs
-  }
+    backgroundColor: '#fff',
+  },
+  message: {
+    marginTop: 20,
+    color: 'green',
+  },
 });

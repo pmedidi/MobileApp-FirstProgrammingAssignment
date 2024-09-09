@@ -1,70 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import * as Location from 'expo-location';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
 
 export default function Explore() {
-  const [location, setLocation] = useState(null);
   const [attractions, setAttractions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const route = useRoute();
+  const { city, state, country } = route.params;
 
   useEffect(() => {
-    const fetchLocation = async () => {
-      console.log("Requesting location permissions...");
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission to access location was denied');
-        return;
-      }
+    if (city && state && country) {
+      fetchAttractions(city, state, country);
+    } else {
+      Alert.alert('No destination selected');
+    }
+  }, [city, state, country]);
 
-      console.log("Fetching current location...");
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation);
-
-      const lat = currentLocation.coords.latitude;
-      const lng = currentLocation.coords.longitude;
-      console.log(`Location fetched: Latitude: ${lat}, Longitude: ${lng}`);
-
-      // Adjusting radius to 500 meters for faster results
-      fetchAttractions(lat, lng, 5000); 
-    };
-
-    const fetchAttractions = async (lat, lng, radius) => {
-      console.log("Fetching nearby attractions...");
-      const API_KEY = 'AIzaSyBFDc_yLeqW6gKyZ1R0HvD_Dq9K9HOFZew'; // Your actual key
-      const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=tourist_attraction&key=${API_KEY}`;
-      
-      try {
-        const response = await axios.get(apiUrl);
-        console.log("Attractions data received:", response.data.results);
-        setAttractions(response.data.results);
-      } catch (error) {
-        console.error("Error fetching attractions:", error);
-      } finally {
-        setLoading(false);  // Stop the loader when fetching is done
-      }
-    };
-
-    fetchLocation();
-  }, []);
+  const fetchAttractions = async (city, state, country) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/textsearch/json?query=attractions+in+${city}+${state}+${country}&key=AIzaSyBFDc_yLeqW6gKyZ1R0HvD_Dq9K9HOFZew`
+      );
+      setAttractions(response.data.results);
+    } catch (error) {
+      console.error('Error fetching attractions:', error);
+      Alert.alert('Failed to fetch attractions.');
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Nearby Attractions</Text>
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Loading attractions...</Text>
-        </View>
-      ) : attractions.length > 0 ? (
+      <Text style={styles.title}>Explore Attractions in {city}, {state}, {country}</Text>
+      {attractions.length > 0 ? (
         attractions.map((attraction, index) => (
-          <View key={index} style={styles.attractionItem}>
-            <Text style={styles.attractionName}>{attraction.name}</Text>
-            <Text>{attraction.vicinity}</Text>
+          <View key={index} style={styles.attractionContainer}>
+            <Text>{attraction.name}</Text>
+            <Text>{attraction.formatted_address}</Text>
           </View>
         ))
       ) : (
-        <Text style={styles.noAttractionsText}>No attractions found in the area.</Text>
+        <Text>No attractions found.</Text>
       )}
     </ScrollView>
   );
@@ -74,36 +49,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#f0f0f0',
   },
-  header: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-  },
-  attractionItem: {
-    marginBottom: 15,
+  attractionContainer: {
     padding: 10,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
+    marginBottom: 10,
     borderRadius: 5,
-  },
-  attractionName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  noAttractionsText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#888',
   },
 });

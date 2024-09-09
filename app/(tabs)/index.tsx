@@ -1,22 +1,13 @@
 import React from 'react';
-import { View, Button, StyleSheet, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function Index({ navigation }) {
+export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to Travel Companion</Text>
-      <Button
-        title="Add a Travel Plan"
-        onPress={() => navigation.navigate('add-plan')}
-      />
-      <Button
-        title="View Itinerary"
-        onPress={() => navigation.navigate('itinerary')}
-      />
-      <Button
-        title="Explore Attractions"
-        onPress={() => navigation.navigate('explore')}
-      />
+      <Text style={styles.description}>
+        Plan your travels, explore attractions, and organize your itinerary with ease.
+      </Text>
     </View>
   );
 }
@@ -27,10 +18,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#333',
     marginBottom: 20,
+  },
+  description: {
+    fontSize: 18,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 10,
   },
 });
