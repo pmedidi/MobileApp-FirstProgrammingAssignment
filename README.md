@@ -31,11 +31,11 @@ Run the following command in your terminal to install the necessary dependencies
 
 ```bash
 npm install
-
+```
 
 ### 2. Start the App:
 Once the dependencies are installed, start the app with:
-npx expo start
+```npx expo start```
 
 ### 3. Running the App:
 You will be presented with options to open the app in various environments:
@@ -53,7 +53,7 @@ Itinerary: View the cities you’ve added and choose one to explore.
 Explore: After selecting a city, you can navigate to this page to see the attractions in the area.
 Resetting the Project
 If you need to reset the project, run:
-npm run reset-project
+```npm run reset-project```
 
 
 This is in GitHub README syntax and can be copied directly into your `README.md` file.
